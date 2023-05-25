@@ -1,7 +1,5 @@
 # automatic-irrigation-system
 
-## How to run the App
-
 
 ## Description
 ### The app handles adding, listing, editing and configuring plots of lands
