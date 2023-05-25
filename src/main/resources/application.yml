@@ -1,0 +1,50 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+irrigation:
+  service:
+    service-name: irrigate-service-circuit-breaker
+    sensor-url: http://localhost:8081/api/plot/irrigate/
+    irrigate-url: https://catfact.ninja/fact
+thread:
+  configuration-thread:
+    sleep-time: 10000
+spring:
+  application:
+    name: loan-service
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    circuitbreakers:
+      enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      irrigate-service:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
